@@ -14,7 +14,7 @@ import './style.scss';
 
 domReady( () => {
 	if ( 'wp_template' === select( 'core/editor' ).getCurrentPostType() ) {
-		registerBlockType( 'a8c/template-part', {
+		registerBlockType( 'core/template', {
 			title: __( 'Template Part' ),
 			description: __( 'Display a template part.' ),
 			icon: 'layout',
