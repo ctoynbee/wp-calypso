@@ -34,8 +34,8 @@
 	},
 	"dependencies": {
 		"@automattic/format-currency": "file:./packages/format-currency",
-		"@automattic/muriel-style": "file:./packages/muriel-style",
 		"@automattic/material-design-icons": "file:./packages/material-design-icons",
+		"@automattic/muriel-style": "file:./packages/muriel-style",
 		"@automattic/tree-select": "file:./packages/tree-select",
 		"@babel/cli": "7.4.3",
 		"@babel/core": "7.4.3",
@@ -124,6 +124,7 @@
 		"imports-loader": "0.8.0",
 		"inherits": "2.0.3",
 		"is-my-json-valid": "2.19.0",
+		"isomorphic-fetch": "2.2.1",
 		"jquery": "1.12.3",
 		"json-stable-stringify": "1.0.1",
 		"keymaster": "1.6.2",
