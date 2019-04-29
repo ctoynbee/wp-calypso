@@ -14,7 +14,7 @@ import './style.scss';
 
 domReady( () => {
 	if ( 'wp_template' === select( 'core/editor' ).getCurrentPostType() ) {
-		registerBlockType( 'a8c/content-slot', {
+		registerBlockType( 'core/post-content', {
 			title: __( 'Content Slot' ),
 			description: __( 'Placeholder for a post or a page.' ),
 			icon: 'layout',

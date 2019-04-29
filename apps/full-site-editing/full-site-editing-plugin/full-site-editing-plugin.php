@@ -3,7 +3,7 @@
  * Plugin Name: Full Site Editing
  */
 
-require_once( 'blocks/content-slot/index.php' );
+require_once( 'blocks/post-content/index.php' );
 require_once( 'blocks/template-part/index.php' );
 
 class A8C_Full_Site_Editing {
@@ -50,10 +50,10 @@ class A8C_Full_Site_Editing {
 	// We only need to declare script and style as dependencies once
 	// Because they'll be then enqueued for every block.
 	function register_blocks() {
-		register_block_type( 'a8c/content-slot', array(
+		register_block_type( 'core/post-content', array(
 			'editor_script'   => 'a8c-full-site-editing-script',
 			'editor_style'    => 'a8c-full-site-editing-style',
-			'render_callback' => 'render_content_slot_block',
+			'render_callback' => 'render_post_content_block',
 		 ) );
 
 		register_block_type( 'a8c/template-part', array(
