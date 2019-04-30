@@ -96,12 +96,12 @@ class JetpackChecklist extends PureComponent {
 					{ isPaidPlan && isRewindAvailable && (
 						<Task
 							{ ...JETPACK_CHECKLIST_TASK_BACKUPS_REWIND }
+							completed={ isRewindActive }
 							onClick={ this.handleTaskStart( {
 								taskId: 'jetpack_backups',
 								url: JETPACK_CHECKLIST_TASK_BACKUPS_REWIND.getUrl( siteSlug ),
 								tourId: isRewindActive ? undefined : 'jetpackBackupsRewind',
 							} ) }
-							completed={ isRewindActive }
 						/>
 					) }
 					{ isPaidPlan && isRewindUnAvailable && productInstallStatus && (
