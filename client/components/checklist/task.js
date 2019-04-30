@@ -7,6 +7,7 @@ import Gridicon from 'gridicons';
 import PropTypes from 'prop-types';
 import React, { Fragment, PureComponent } from 'react';
 import { localize } from 'i18n-calypso';
+import { connect } from 'react-redux';
 
 /**
  * Internal dependencies
@@ -16,6 +17,7 @@ import CompactCard from 'components/card/compact';
 import Focusable from 'components/focusable';
 import ScreenReaderText from 'components/screen-reader-text';
 import Spinner from 'components/spinner';
+import { recordTracksEvent } from 'state/analytics/actions';
 
 class Task extends PureComponent {
 	static propTypes = {
@@ -40,12 +42,19 @@ class Task extends PureComponent {
 		trackTaskDisplay: () => {},
 	};
 
+	constructor( props ) {
+		super( props );
+		this.state = {
+			isCollapsed: props.firstIncomplete.id !== props.id,
+		};
+	}
+
 	componentDidMount() {
 		this.props.trackTaskDisplay( this.props.id, this.props.completed, 'checklist' );
 	}
 
 	renderCheckmarkIcon() {
-		const { completed, inProgress, isWarning, translate } = this.props;
+		const { completed, disableIcon, inProgress, isWarning, translate } = this.props;
 		const onDismiss = ! completed ? this.props.onDismiss : undefined;
 
 		if ( inProgress ) {
@@ -54,6 +63,14 @@ class Task extends PureComponent {
 					<ScreenReaderText>{ translate( 'In progress' ) }</ScreenReaderText>
 					{ this.renderGridicon() }
 				</Fragment>
+			);
+		}
+
+		if ( disableIcon && ! completed ) {
+			return (
+				<div className="checklist__task-icon is-disabled">
+					<ScreenReaderText>{ translate( 'Waiting to complete' ) }</ScreenReaderText>
+				</div>
 			);
 		}
 
@@ -93,6 +110,21 @@ class Task extends PureComponent {
 		return null;
 	}
 
+	onTaskClick = event => {
+		event.preventDefault();
+
+		if ( this.props.isExpandable && this.state.isCollapsed ) {
+			this.props.recordTracksEvent( 'calypso_checklist_task_expand', {
+				step_name: this.props.id,
+			} );
+			this.setState( {
+				isCollapsed: false,
+			} );
+		} else {
+			this.props.onClick();
+		}
+	};
+
 	renderGridicon() {
 		if ( this.props.inProgress ) {
 			return <Spinner size={ 20 } />;
@@ -124,11 +156,9 @@ class Task extends PureComponent {
 			onClick,
 			title,
 			translate,
-			firstIncomplete,
 		} = this.props;
 		const { buttonText = translate( 'Do it!' ) } = this.props;
 		const hasActionlink = completed && completedButtonText;
-		const isCollapsed = firstIncomplete && firstIncomplete.id !== this.props.id;
 
 		return (
 			<CompactCard
@@ -137,12 +167,12 @@ class Task extends PureComponent {
 					'is-completed': completed,
 					'is-in-progress': inProgress,
 					'has-actionlink': hasActionlink,
-					'is-collapsed': isCollapsed,
+					'is-collapsed': this.state.isCollapsed,
 				} ) }
 			>
 				<div className="checklist__task-primary">
 					<h3 className="checklist__task-title">
-						<Button borderless className="checklist__task-title-link" onClick={ onClick }>
+						<Button borderless className="checklist__task-title-link" onClick={ this.onTaskClick }>
 							{ ( completed && completedTitle ) || title }
 						</Button>
 					</h3>
@@ -173,4 +203,7 @@ class Task extends PureComponent {
 	}
 }
 
-export default localize( Task );
+export default connect(
+	null,
+	{ recordTracksEvent }
+)( localize( Task ) );
