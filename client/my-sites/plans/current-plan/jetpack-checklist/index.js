@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import page from 'page';
 import React, { Fragment, PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { get, includes, map } from 'lodash';
@@ -44,8 +43,8 @@ class JetpackChecklist extends PureComponent {
 		return get( this.props.taskStatuses, [ taskId, 'completed' ], false );
 	}
 
-	handleTaskStart = ( { taskId, tourId, url } ) => () => {
-		if ( ! tourId && ! url ) {
+	handleTaskStart = ( { taskId, tourId } ) => () => {
+		if ( ! tourId ) {
 			return;
 		}
 
@@ -57,10 +56,6 @@ class JetpackChecklist extends PureComponent {
 
 		if ( tourId && ! this.isComplete( taskId ) && isDesktop() ) {
 			this.props.requestGuidedTour( tourId );
-		}
-
-		if ( url ) {
-			page.show( url );
 		}
 	};
 
@@ -99,9 +94,9 @@ class JetpackChecklist extends PureComponent {
 							completed={ isRewindActive }
 							onClick={ this.handleTaskStart( {
 								taskId: 'jetpack_backups',
-								url: JETPACK_CHECKLIST_TASK_BACKUPS_REWIND.getUrl( siteSlug ),
 								tourId: isRewindActive ? undefined : 'jetpackBackupsRewind',
 							} ) }
+							href={ JETPACK_CHECKLIST_TASK_BACKUPS_REWIND.getUrl( siteSlug ) }
 						/>
 					) }
 					{ isPaidPlan && isRewindUnAvailable && productInstallStatus && (
@@ -133,9 +128,9 @@ class JetpackChecklist extends PureComponent {
 								completedTitle={ task.completedTitle }
 								description={ task.description }
 								duration={ task.duration }
+								href={ task.getUrl( siteSlug ) }
 								onClick={ this.handleTaskStart( {
 									taskId,
-									url: task.getUrl( siteSlug ),
 									tourId: get( task, 'tourId', null ),
 								} ) }
 								title={ task.title }
