@@ -6,6 +6,7 @@ export default {
 	 * or an unrecognized filter, is provided.
 	 *
 	 * @param {string} filter - The filter to get a mime from
+	 * @returns {string} MIME type
 	 */
 	getMimeBaseTypeFromFilter: function( filter ) {
 		let mime;
@@ -33,5 +34,19 @@ export default {
 		}
 
 		return mime;
+	},
+
+	/**
+	 * Determine if a particular source can send MIME filters
+	 *
+	 * @param {string} source - The source to check for MIME filtering capabilities
+	 * @returns {bool} true if the source can MIME filter, false otherwise
+	 */
+	canMimeFilter( source ) {
+		if ( source === 'pexels' ) {
+			return false;
+		}
+
+		return true;
 	},
 };

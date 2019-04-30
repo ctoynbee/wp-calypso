@@ -42,5 +42,17 @@ describe( 'utils', () => {
 
 			expect( baseType ).to.equal( 'application/' );
 		} );
+
+		test( 'should return true that default WP media can be mime filtered', () => {
+			const baseType = utils.canMimeFilter( '' );
+
+			expect( baseType ).to.be.true;
+		} );
+
+		test( 'should return false that Pexels media can be mime filtered', () => {
+			const baseType = utils.canMimeFilter( 'pexels' );
+
+			expect( baseType ).to.be.false;
+		} );
 	} );
 } );

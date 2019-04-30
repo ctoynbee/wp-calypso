@@ -65,7 +65,7 @@ export default class extends React.Component {
 			query.search = props.search;
 		}
 
-		if ( props.filter && ! props.source ) {
+		if ( props.filter && utils.canMimeFilter( props.source ) ) {
 			if ( props.filter === 'this-post' ) {
 				if ( props.postId ) {
 					query.post_ID = props.postId;
