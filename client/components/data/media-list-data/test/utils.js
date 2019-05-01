@@ -43,4 +43,12 @@ describe( 'utils', () => {
 			expect( baseType ).to.equal( 'application/' );
 		} );
 	} );
+
+	describe( '#getGoogleCategoryFilter()', () => {
+		test( 'show return categoryFilter prefix for Google', () => {
+			const filter = utils.getGoogleCategoryFilter( 'cats' );
+
+			expect( filter ).to.equal( 'categoryInclude=cats' );
+		} );
+	} );
 } );

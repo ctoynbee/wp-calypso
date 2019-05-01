@@ -78,6 +78,10 @@ export default class extends React.Component {
 		if ( props.source ) {
 			query.source = props.source;
 			query.path = 'recent';
+
+			if ( props.source === 'google_photos' && props.categoryFilter ) {
+				query.filter = utils.getGoogleCategoryFilter( props.categoryFilter );
+			}
 		}
 
 		return query;

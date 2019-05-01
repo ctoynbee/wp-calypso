@@ -69,4 +69,32 @@ describe( 'EditorMediaModal', () => {
 
 		expect( result ).to.eql( { path: 'recent', source: 'anything' } );
 	} );
+
+	test( 'should pass categoryFilter parameter to media query for Google Photos', () => {
+		const tree = shallow(
+			<MediaListData siteId={ DUMMY_SITE_ID }>
+				<EMPTY_COMPONENT />
+			</MediaListData>
+		).instance();
+		const query = { categoryFilter: 'cats', source: 'google_photos' };
+		const result = tree.getQuery( query );
+
+		expect( result ).to.eql( {
+			filter: 'categoryInclude=cats',
+			path: 'recent',
+			source: 'google_photos',
+		} );
+	} );
+
+	test( 'should not pass categoryFilter parameter to media query for other sources', () => {
+		const tree = shallow(
+			<MediaListData siteId={ DUMMY_SITE_ID }>
+				<EMPTY_COMPONENT />
+			</MediaListData>
+		).instance();
+		const query = { categoryFilter: 'cats', source: '' };
+		const result = tree.getQuery( query );
+
+		expect( result ).to.eql( {} );
+	} );
 } );

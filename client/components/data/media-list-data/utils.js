@@ -6,6 +6,7 @@ export default {
 	 * or an unrecognized filter, is provided.
 	 *
 	 * @param {string} filter - The filter to get a mime from
+	 * @returns {string} Mime type
 	 */
 	getMimeBaseTypeFromFilter: function( filter ) {
 		let mime;
@@ -33,5 +34,15 @@ export default {
 		}
 
 		return mime;
+	},
+
+	/**
+	 * Return an appropriate filter for Google Photo categories
+	 *
+	 * @param {string} filter The category to filter by
+	 * @returns {string} Google filter
+	 */
+	getGoogleCategoryFilter: function( filter ) {
+		return 'categoryInclude=' + filter;
 	},
 };
