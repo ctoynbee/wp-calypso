@@ -26,6 +26,10 @@ class A8C_Full_Site_Editing {
 	}
 
 	function register_script_and_style() {
+		if ( ! $this->is_editor_wp_template() ) {
+			return;
+		}
+
 		$script_dependencies = json_decode( file_get_contents(
 			plugin_dir_path( __FILE__ ) . 'dist/full-site-editing-plugin.deps.json'
 		), true );
@@ -59,6 +63,12 @@ class A8C_Full_Site_Editing {
 		register_block_type( 'a8c/template-part', array(
 			'render_callback' => 'render_template_part_block',
 		) );
+	}
+
+	function is_editor_wp_template() {
+		return
+			( isset( $_GET['post_type'] ) && 'wp_template' === $_GET['post_type'] ) ||
+			( isset( $_GET['post'] ) && 'wp_template' === get_post_type( $_GET['post'] ) );
 	}
 }
 
