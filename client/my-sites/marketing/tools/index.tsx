@@ -11,7 +11,7 @@ import { useTranslate } from 'i18n-calypso';
  */
 import Button from 'components/button';
 import { getSelectedSiteSlug } from 'state/ui/selectors';
-import GoogleAdwordsCard from './google-adwords';
+import MarketingToolsGoogleAdwordsFeature from './google-adwords';
 import MarketingToolsFeature from './feature';
 import MarketingToolsHeader from './header';
 import { marketingSharingButtons, marketingTraffic } from 'my-sites/marketing/paths';
@@ -103,7 +103,7 @@ export const MarketingTools: FunctionComponent< Props > = ( {
 					</Button>
 				</MarketingToolsFeature>
 
-				<GoogleAdwordsCard />
+				<MarketingToolsGoogleAdwordsFeature />
 			</div>
 		</Fragment>
 	);
