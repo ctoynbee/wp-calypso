@@ -161,6 +161,7 @@ export class EditorMediaModal extends Component {
 			detailSelectedIndex: 0,
 			source: props.source ? props.source : '',
 			gallerySettings: props.initialGallerySettings,
+			categoryFilter: null,
 		};
 	}
 
@@ -438,6 +439,10 @@ export class EditorMediaModal extends Component {
 		this.setState( { source, search: undefined } );
 	};
 
+	onCategoryFilterChange = categoryFilter => {
+		this.setState( { categoryFilter } );
+	};
+
 	onClose = () => {
 		this.props.onClose();
 	};
@@ -615,11 +620,13 @@ export class EditorMediaModal extends Component {
 						enabledFilters={ this.props.enabledFilters }
 						search={ this.state.search }
 						source={ this.state.source }
+						categoryFilter={ this.state.categoryFilter }
 						onAddMedia={ this.onAddMedia }
 						onAddAndEditImage={ this.onAddAndEditImage }
 						onFilterChange={ this.onFilterChange }
 						onScaleChange={ this.onScaleChange }
 						onSourceChange={ this.onSourceChange }
+						onCategoryFilterChange={ this.onCategoryFilterChange }
 						onSearch={ this.onSearch }
 						onEditItem={ this.editItem }
 						fullScreenDropZone={ false }
