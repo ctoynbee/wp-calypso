@@ -29,9 +29,11 @@ class Task extends PureComponent {
 		completedTitle: PropTypes.node,
 		description: PropTypes.node,
 		duration: PropTypes.string,
+		isCollapsed: PropTypes.bool,
 		inProgress: PropTypes.bool,
 		isWarning: PropTypes.bool,
 		onClick: PropTypes.func,
+		onCollapsedClick: PropTypes.func,
 		onDismiss: PropTypes.func,
 		title: PropTypes.node.isRequired,
 		translate: PropTypes.func.isRequired,
@@ -41,13 +43,6 @@ class Task extends PureComponent {
 	static defaultProps = {
 		trackTaskDisplay: () => {},
 	};
-
-	constructor( props ) {
-		super( props );
-		this.state = {
-			isCollapsed: props.firstIncomplete.id !== props.id,
-		};
-	}
 
 	componentDidMount() {
 		this.props.trackTaskDisplay( this.props.id, this.props.completed, 'checklist' );
@@ -112,18 +107,24 @@ class Task extends PureComponent {
 
 	onTaskClick = event => {
 		event.preventDefault();
+		const { completed, id, onClick, onCollapsedClick } = this.props;
 
-		if ( this.props.isExpandable && this.state.isCollapsed ) {
+		// We presuppose expandability based on the presence of `onCollapsedClick`
+		if ( ! completed && this.isTaskCollapsed() && onCollapsedClick ) {
+			onCollapsedClick( id );
 			this.props.recordTracksEvent( 'calypso_checklist_task_expand', {
-				step_name: this.props.id,
-			} );
-			this.setState( {
-				isCollapsed: false,
+				step_name: id,
 			} );
 		} else {
-			this.props.onClick();
+			// The task-related action
+			onClick();
 		}
 	};
+
+	isTaskCollapsed = () =>
+		typeof this.props.isCollapsed === 'boolean'
+			? this.props.isCollapsed
+			: this.props.firstIncomplete && this.props.firstIncomplete.id !== this.props.id;
 
 	renderGridicon() {
 		if ( this.props.inProgress ) {
@@ -145,6 +146,7 @@ class Task extends PureComponent {
 	render() {
 		const {
 			buttonPrimary,
+			buttonText,
 			completed,
 			completedButtonText,
 			completedDescription,
@@ -157,8 +159,10 @@ class Task extends PureComponent {
 			title,
 			translate,
 		} = this.props;
-		const { buttonText = translate( 'Do it!' ) } = this.props;
 		const hasActionlink = completed && completedButtonText;
+		const taskActionButtonText = hasActionlink
+			? completedButtonText
+			: buttonText || translate( 'Do it!' );
 
 		return (
 			<CompactCard
@@ -167,7 +171,7 @@ class Task extends PureComponent {
 					'is-completed': completed,
 					'is-in-progress': inProgress,
 					'has-actionlink': hasActionlink,
-					'is-collapsed': this.state.isCollapsed,
+					'is-collapsed': this.isTaskCollapsed(),
 				} ) }
 			>
 				<div className="checklist__task-primary">
@@ -188,7 +192,7 @@ class Task extends PureComponent {
 				</div>
 				<div className="checklist__task-secondary">
 					<Button className="checklist__task-action" onClick={ onClick } primary={ buttonPrimary }>
-						{ hasActionlink ? completedButtonText : buttonText }
+						{ taskActionButtonText }
 					</Button>
 					{ duration && (
 						<small className="checklist__task-duration">
